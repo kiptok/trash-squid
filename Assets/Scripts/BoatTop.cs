@@ -5,7 +5,6 @@ public class BoatTop : MonoBehaviour
 {
     public static event Action<BoatTop, Trash> OnTrashHit;
 
-    public AudioSource trashGetSound;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -21,7 +20,6 @@ public class BoatTop : MonoBehaviour
     {
         var trash = collision.gameObject.GetComponent<Trash>();
         if (trash == null || !trash.GetComponent<Rigidbody2D>().simulated) return;
-        trashGetSound.Play();
         OnTrashHit?.Invoke(this, trash);
     }
 }

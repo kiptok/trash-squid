@@ -16,10 +16,12 @@ public class Trash : MonoBehaviour
     [SerializeField, TweakableMember(minValue = 0, maxValue = 25, group = "Trash")] private float _airAngularDrag = 15.0f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 25, group = "Trash")] private float _waterAngularDrag = 15.0f;
     public ParticleSystem bubbles;
+    public AudioSource trashGetSound;
 
     private bool _inWater = false;
     private bool _canBePickedUp = true;
     private bool _inBoat = false;
+    private bool _dropped = false;
     private Rigidbody2D _rigidBody = null;
     private Collider2D _collider = null;
     private Collider2D _pickUpCollider = null;
@@ -54,6 +56,7 @@ public class Trash : MonoBehaviour
         _inBoat = true;
         _rigidBody.simulated = false;
         bubbles.Stop();
+        if (_dropped) trashGetSound.Play();
         // play sound
     }
 
@@ -70,6 +73,7 @@ public class Trash : MonoBehaviour
     private void OnSquidDropTrash(SquidController squid, Trash trash)
     {
         if (trash != this) return;
+        _dropped = true;
         _canBePickedUp = false;
         StartCoroutine(StartPickUpTimer());
     }

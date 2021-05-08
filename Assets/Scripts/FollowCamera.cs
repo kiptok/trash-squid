@@ -33,8 +33,8 @@ public class FollowCamera : MonoBehaviour
         float zPos = transform.position.z;
         movementThisFrame.z = 0;
         transform.position += movementThisFrame;
-        xPos = Mathf.Clamp(xPos + movementThisFrame.x, -30.0f, 30.0f);
-        yPos = Mathf.Clamp(yPos + movementThisFrame.y, -88.0f, 15.0f);
+        xPos = Mathf.Clamp(xPos + movementThisFrame.x, -30.5f, 30.5f);
+        yPos = Mathf.Clamp(yPos + movementThisFrame.y, -88.5f, 88.5f);
         transform.position = new Vector3(xPos, yPos, zPos);
     }
 }

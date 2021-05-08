@@ -54,6 +54,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bottle
       objectReference: {fileID: 0}
+    - target: {fileID: 3105170484388668649, guid: e0bc8cffddb904b409a695d59d8c36df, type: 3}
+      propertyPath: _waterGravityScale
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 3105170484388668650, guid: e0bc8cffddb904b409a695d59d8c36df, type: 3}
       propertyPath: m_RootOrder
       value: 0
