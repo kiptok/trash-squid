@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Audio : MonoBehaviour {
 
+    public SquidController squid;
     private AudioSource music;
     private AudioLowPassFilter lpf;
+
+    public float minCutoff;
+    public float maxCutoff;
 
     private bool filtering;
 
     private void Awake() {
+        music = GetComponent<AudioSource>();
+        lpf = GetComponent<AudioLowPassFilter>();
         SquidController.OnDive += OnSquidDive;
         SquidController.OnSurface += OnSquidSurface;
     }
@@ -25,16 +31,17 @@ public class Audio : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        /*if (filtering) {
-
-        }*/
+        if (filtering) {
+//            lpf.cutoffFrequency = maxCutoff * (minCutoff / maxCutoff) * Mathf.Pow()
+            lpf.cutoffFrequency = Mathf.Lerp(maxCutoff, minCutoff, squid.transform.position.y / -100f);
+        }
     }
 
-    private void OnSquidDive(SquidController squid) {
+    private void OnSquidDive(SquidController sq) {
         filtering = true;
     }
 
-    private void OnSquidSurface(SquidController squid) {
+    private void OnSquidSurface(SquidController sq) {
         filtering = false;
     }
 }

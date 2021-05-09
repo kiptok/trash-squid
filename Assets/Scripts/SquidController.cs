@@ -15,12 +15,16 @@ public class SquidController : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip trashGetSound;
     public AudioClip thrustSound;
+    public AudioClip jumpSound;
     public AudioClip splashSound;
+    public AudioClip diveSound;
+    public AudioClip surfaceSound;
 
     [SerializeField, TweakableMember(group = "Squid")] private float _thrustForceMagnitude = 1.0f;
     [SerializeField] private float _relativeForceDirectionInDegrees = 0.0f;
     [SerializeField, TweakableMember(minValue = -100, maxValue = 100, group = "Squid")] private float _torqueForceMagnitude = 1f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _thrustTime = 0.5f;
+    [SerializeField, TweakableMember(group = "Squid")] private float _jumpForceMagnitude = 1.0f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _trashThrowDownFactor = 0.5f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _trashThrowVelocityFactor = 0.5f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _dropTime = 0.5f;
@@ -38,6 +42,8 @@ public class SquidController : MonoBehaviour {
     private TrashDetector _trashCollider = null;
     private bool _isThrustQueued = false;
     private bool _canThrust = true;
+    private bool _isJumpQueued = false;
+    private bool _canDoubleJump = false;
     private float _torque = 0.0f;
     private bool _inWater = true;
     private List<Trash> _pickedUpTrash = new List<Trash>();
@@ -58,23 +64,15 @@ public class SquidController : MonoBehaviour {
         if (_canSpamThrust && !_isThrustQueued) HandleSpamThrust();
         else if (!_canSpamThrust) HandleHeldThrust();
         _torque = Input.GetAxis("Horizontal") * _torqueForceMagnitude;
-        if (!_inWater && transform.position.y < 0) {
-            audioSource.PlayOneShot(splashSound);
-            OnDive?.Invoke(this);
-        } else if (_inWater && transform.position.y > 0) {
-            OnSurface?.Invoke(this);
-        }
+        if (!_inWater && transform.position.y < 0) HandleDive();
+        else if (_inWater && transform.position.y > 0) HandleSurface();
         _inWater = transform.position.y < 0;
         if (!_inWater) _isThrustQueued = false;
+        if (_canDoubleJump && !_isJumpQueued) _isJumpQueued = Input.GetButtonDown("Jump");
         _rigidBody.gravityScale = _inWater ? _waterGravityScale : _airGravityScale;
         _rigidBody.drag = _inWater ? _waterLinearDrag : _airLinearDrag;
         _rigidBody.angularDrag = _inWater ? _waterAngularDrag : _airAngularDrag;
         if (Input.GetKeyDown(KeyCode.E)) DropAllTrash();
-    }
-
-    private void HandleSpamThrust() {
-        _isThrustQueued = Input.GetButtonDown("Jump");
-        _canThrust = true;
     }
 
     private void FixedUpdate() {
@@ -84,11 +82,21 @@ public class SquidController : MonoBehaviour {
         } else if (_canThrust && !_isThrustQueued) {
             animator.SetBool("Thrusting", false);
         }
+        if (_isJumpQueued) {
+            DoubleJump();
+            // animator
+        }
+
         ApplyTorque();
     }
 
     private void OnTrashCollideWithSquipPickUpCollider(Trash trash, TrashDetector collider) {
         if (collider == _trashCollider && _canPickUp) PickUpTrash(trash);
+    }
+
+    private void HandleSpamThrust() {
+        _isThrustQueued = Input.GetButtonDown("Jump");
+        _canThrust = true;
     }
 
     private void HandleHeldThrust() {
@@ -119,6 +127,34 @@ public class SquidController : MonoBehaviour {
             Mathf.Cos(_relativeForceDirectionInDegrees * Mathf.Deg2Rad),
             Mathf.Sin(_relativeForceDirectionInDegrees * Mathf.Deg2Rad));
         return directionVector * _thrustForceMagnitude;
+    }
+
+    private Vector2 CalculateJumpForceVector() {
+        var directionVector = new Vector2(
+            Mathf.Cos(_relativeForceDirectionInDegrees * Mathf.Deg2Rad),
+            Mathf.Sin(_relativeForceDirectionInDegrees * Mathf.Deg2Rad));
+        return directionVector * _jumpForceMagnitude;
+    }
+
+    private void DoubleJump() {
+        // maybe make jump force dependent on trash or something
+        _rigidBody.AddRelativeForce(CalculateJumpForceVector(), ForceMode2D.Impulse);
+        _canDoubleJump = false;
+        _isJumpQueued = false;
+        // play jump sound
+    }
+
+    private void HandleDive() {
+        // maybe make dive sound dependent on physics
+        audioSource.PlayOneShot(splashSound);
+        _canDoubleJump = false;
+        OnDive?.Invoke(this);
+    }
+
+    private void HandleSurface() {
+        // play surfacing sound
+        _canDoubleJump = true;
+        OnSurface?.Invoke(this);
     }
 
     private void PickUpTrash(Trash trash) {

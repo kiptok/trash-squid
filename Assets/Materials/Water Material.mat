@@ -40,7 +40,7 @@ Material:
     - Vector1_63021dcfd8c449e58fbe9484ce91ec5d: -0.1
     - Vector1_7c543c2a9d4644ba9071ca0697f8da69: 0.004
     - Vector1_d4e68abbba5b4240b0291de0541d7213: 0.1
-    - _Pollution: 0.09781616
+    - _Pollution: 0.2994971
     m_Colors:
     - Clean_Color_A: {r: 0, g: 0, b: 0.5019608, a: 0}
     - Clean_Color_B: {r: 0.2311321, g: 0.8920127, b: 1, a: 0}
@@ -52,8 +52,8 @@ Material:
     - Dirty_Color_A: {r: 0.3867925, g: 0.2475161, b: 0, a: 0}
     - Dirty_Color_B: {r: 0.06448024, g: 0.2169811, b: 0.07511984, a: 0}
     - Light_Color: {r: 0.9528302, g: 0.9260713, b: 0.5438323, a: 0}
-    - Light_Color_A: {r: 0.9528302, g: 0.9260713, b: 0.5438323, a: 0}
-    - Light_Color_B: {r: 0.9528302, g: 0.9260713, b: 0.5438323, a: 0}
+    - Light_Color_A: {r: 0.8440247, g: 0.716257, b: 0.83130956, a: 1}
+    - Light_Color_B: {r: 0.84573877, g: 0.4679577, b: 0.35515535, a: 1}
     - Sky_Color_A: {r: 1, g: 0.2688679, b: 0.2688679, a: 0}
     - Sky_Color_B: {r: 0.21226418, g: 1, b: 0.6267088, a: 0}
     - Vector2_a5c5591781e943b0b1a80f0c82d043a8: {r: 0, g: 0, b: 0, a: 0}

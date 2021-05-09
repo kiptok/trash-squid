@@ -19,6 +19,8 @@ public class PollutionSystem : MonoBehaviour
     private int _cleanColorBID;
     private int _dirtyColorAID;
     private int _dirtyColorBID;
+    private int _lightColorAID;
+    private int _lightColorBID;
     private float _lerpValuePerSecond = 0.5f;
 
     public int Pollution
@@ -49,6 +51,8 @@ public class PollutionSystem : MonoBehaviour
         _cleanColorBID = Shader.PropertyToID("Clean_Color_B");
         _dirtyColorAID = Shader.PropertyToID("Dirty_Color_A");
         _dirtyColorBID = Shader.PropertyToID("Dirty_Color_B");
+        _lightColorAID = Shader.PropertyToID("Light_Color_A");
+        _lightColorBID = Shader.PropertyToID("Light_Color_B");
         // set colors for sky/water
         SetColors();
     }
@@ -57,10 +61,12 @@ public class PollutionSystem : MonoBehaviour
     {
         Pollute(water);
         Pollute(sky);
+        UpdateColors();
     }
 
     private void SetColors()
     {
+        // semi-random sky color A and derived sky color B
         Color skyColorA = Random.ColorHSV(0f, 1f, 0f, 1f, 0.8f, 1f);
         Color.RGBToHSV(skyColorA, out float Ah, out float As, out float Av);
         float minh, maxh, mins, maxs, minv, maxv;
@@ -73,6 +79,17 @@ public class PollutionSystem : MonoBehaviour
         Color skyColorB = Random.ColorHSV(minh, maxh, mins, maxs, minv, maxv);
         sky.SetColor(_skyColorAID, skyColorA);
         sky.SetColor(_skyColorBID, skyColorB);
+
+        Color lightColorA = skyColorA;
+        Color lightColorB = skyColorB;
+
+        // light color in water comes from these
+        water.SetColor(_lightColorAID, lightColorA);
+        water.SetColor(_lightColorBID, lightColorB);
+    }
+
+    private void UpdateColors() {
+        // if
     }
 
     private void Pollute(Material material)
