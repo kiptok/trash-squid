@@ -7,9 +7,10 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class SquidController : MonoBehaviour
-{
+public class SquidController : MonoBehaviour {
     public static event Action<SquidController, Trash> OnDropTrash;
+    public static event Action<SquidController> OnDive;
+    public static event Action<SquidController> OnSurface;
     public Animator animator;
     public AudioSource audioSource;
     public AudioClip trashGetSound;
@@ -42,27 +43,26 @@ public class SquidController : MonoBehaviour
     private List<Trash> _pickedUpTrash = new List<Trash>();
     private bool _canPickUp = true;
 
-    private void Awake()
-    {
+    private void Awake() {
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _trashCollider = GetComponentInChildren<TrashDetector>();
         Trash.OnOnTrashEntersTriggerHandled += OnTrashCollideWithSquipPickUpCollider;
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         Trash.OnOnTrashEntersTriggerHandled -= OnTrashCollideWithSquipPickUpCollider;
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (_canSpamThrust && !_isThrustQueued) HandleSpamThrust();
         else if (!_canSpamThrust) HandleHeldThrust();
         _torque = Input.GetAxis("Horizontal") * _torqueForceMagnitude;
-        if (!_inWater && transform.position.y < 0)
-        {
+        if (!_inWater && transform.position.y < 0) {
             audioSource.PlayOneShot(splashSound);
+            OnDive?.Invoke(this);
+        } else if (_inWater && transform.position.y > 0) {
+            OnSurface?.Invoke(this);
         }
         _inWater = transform.position.y < 0;
         if (!_inWater) _isThrustQueued = false;
@@ -72,32 +72,26 @@ public class SquidController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) DropAllTrash();
     }
 
-    private void HandleSpamThrust()
-    {
+    private void HandleSpamThrust() {
         _isThrustQueued = Input.GetButtonDown("Jump");
         _canThrust = true;
     }
 
-    private void FixedUpdate()
-    {
-        if (_isThrustQueued)
-        {
+    private void FixedUpdate() {
+        if (_isThrustQueued) {
             Thrust();
             animator.SetBool("Thrusting", true);
-        } else if (_canThrust && !_isThrustQueued)
-        {
+        } else if (_canThrust && !_isThrustQueued) {
             animator.SetBool("Thrusting", false);
         }
         ApplyTorque();
     }
 
-    private void OnTrashCollideWithSquipPickUpCollider(Trash trash, TrashDetector collider)
-    {
+    private void OnTrashCollideWithSquipPickUpCollider(Trash trash, TrashDetector collider) {
         if (collider == _trashCollider && _canPickUp) PickUpTrash(trash);
     }
 
-    private void HandleHeldThrust()
-    {
+    private void HandleHeldThrust() {
         if (!_canThrust || _isThrustQueued) return;
         _isThrustQueued = _inWater && (Input.GetButton("Jump") || Input.GetAxisRaw("Vertical") == 1);
         if (!_isThrustQueued) return;
@@ -105,34 +99,29 @@ public class SquidController : MonoBehaviour
         StartCoroutine(ResetHeldThrust());
     }
 
-    private IEnumerator ResetHeldThrust()
-    {
+    private IEnumerator ResetHeldThrust() {
         yield return new WaitForSeconds(_thrustTime);
         _canThrust = true;
     }
 
-    private void ApplyTorque()
-    {
+    private void ApplyTorque() {
         _rigidBody.AddTorque(_torque);
     }
 
-    private void Thrust()
-    {
+    private void Thrust() {
         _rigidBody.AddRelativeForce(CalculateThrustForceVector(), ForceMode2D.Impulse);
         _isThrustQueued = false;
         audioSource.PlayOneShot(thrustSound, Random.Range(0.75f, 1f));
     }
 
-    private Vector2 CalculateThrustForceVector()
-    {
+    private Vector2 CalculateThrustForceVector() {
         var directionVector = new Vector2(
             Mathf.Cos(_relativeForceDirectionInDegrees * Mathf.Deg2Rad),
             Mathf.Sin(_relativeForceDirectionInDegrees * Mathf.Deg2Rad));
         return directionVector * _thrustForceMagnitude;
     }
 
-    private void PickUpTrash(Trash trash)
-    {
+    private void PickUpTrash(Trash trash) {
         trash.transform.SetParent(transform);
         trash.transform.position = _trashCollider.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
         trash.GetComponent<Rigidbody2D>().simulated = false;
@@ -140,22 +129,19 @@ public class SquidController : MonoBehaviour
         audioSource.Play();
     }
 
-    private IEnumerator ResetPickUp()
-    {
+    private IEnumerator ResetPickUp() {
         yield return new WaitForSeconds(_dropTime);
         _canPickUp = true;
     }
 
-    private void DropAllTrash()
-    {
+    private void DropAllTrash() {
         foreach (var trash in _pickedUpTrash.ToList())
             DropTrash(trash);
         _canPickUp = false;
         StartCoroutine(ResetPickUp());
     }
 
-    private void DropTrash(Trash trash)
-    {
+    private void DropTrash(Trash trash) {
         _pickedUpTrash.Remove(trash);
         trash.transform.SetParent(null);
         trash.GetComponent<Rigidbody2D>().simulated = true;
