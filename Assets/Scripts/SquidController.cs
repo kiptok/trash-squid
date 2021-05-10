@@ -25,10 +25,12 @@ public class SquidController : MonoBehaviour {
     [SerializeField, TweakableMember(minValue = -100, maxValue = 100, group = "Squid")] private float _torqueForceMagnitude = 1f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _thrustTime = 0.5f;
     [SerializeField, TweakableMember(group = "Squid")] private float _jumpForceMagnitude = 1.0f;
+    [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _jumpHoldTime = 0.25f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _trashThrowDownFactor = 0.5f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _trashThrowVelocityFactor = 0.5f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 5, group = "Squid")] private float _dropTime = 0.5f;
     [SerializeField] private bool _canSpamThrust = false;
+    [SerializeField] private bool _canSpamJump = false;
     [Header("Rigidbody parameters")]
     [SerializeField, TweakableMember(minValue = -5, maxValue = 5, group = "Squid")] private float _airGravityScale = 1.0f;
     [SerializeField, TweakableMember(minValue = -5, maxValue = 5, group = "Squid")] private float _waterGravityScale = 0.001f;
@@ -42,8 +44,10 @@ public class SquidController : MonoBehaviour {
     private TrashDetector _trashCollider = null;
     private bool _isThrustQueued = false;
     private bool _canThrust = true;
+    private bool _isJumpHeld = false;
     private bool _isJumpQueued = false;
     private bool _canDoubleJump = false;
+    public float _jumpHoldTimer = 0.0f;
     private float _torque = 0.0f;
     private bool _inWater = true;
     private List<Trash> _pickedUpTrash = new List<Trash>();
@@ -63,12 +67,12 @@ public class SquidController : MonoBehaviour {
     private void Update() {
         if (_canSpamThrust && !_isThrustQueued) HandleSpamThrust();
         else if (!_canSpamThrust) HandleHeldThrust();
+        if (!_canSpamJump) HandleHeldJump();
         _torque = Input.GetAxis("Horizontal") * _torqueForceMagnitude;
         if (!_inWater && transform.position.y < 0) HandleDive();
         else if (_inWater && transform.position.y > 0) HandleSurface();
         _inWater = transform.position.y < 0;
         if (!_inWater) _isThrustQueued = false;
-        if (_canDoubleJump && !_isJumpQueued) _isJumpQueued = Input.GetButtonDown("Jump");
         _rigidBody.gravityScale = _inWater ? _waterGravityScale : _airGravityScale;
         _rigidBody.drag = _inWater ? _waterLinearDrag : _airLinearDrag;
         _rigidBody.angularDrag = _inWater ? _waterAngularDrag : _airAngularDrag;
@@ -83,7 +87,7 @@ public class SquidController : MonoBehaviour {
             animator.SetBool("Thrusting", false);
         }
         if (_isJumpQueued) {
-            DoubleJump();
+            DoubleJump(); // force determined by how long the jump was held
             // animator
         }
 
@@ -112,6 +116,22 @@ public class SquidController : MonoBehaviour {
         _canThrust = true;
     }
 
+    private void HandleHeldJump() {
+        if (!_canDoubleJump || _isJumpQueued) return;
+        if (_canDoubleJump && !_isJumpQueued && _isJumpHeld) {
+            // check for release of double jump
+            if (!_inWater && !(Input.GetButton("Jump") || Input.GetAxisRaw("Vertical") == 1)) {
+                // reset if not held long enough
+                if (_jumpHoldTimer > _jumpHoldTime) _isJumpQueued = true;
+                else _jumpHoldTimer = 0f;
+            }
+        }
+        _isJumpHeld = !_inWater && (Input.GetButton("Jump") || Input.GetAxisRaw("Vertical") == 1);
+        if (!_isJumpHeld) return;
+        // play some charging effect/sound
+        _jumpHoldTimer += Time.deltaTime;
+    }
+
     private void ApplyTorque() {
         _rigidBody.AddTorque(_torque);
     }
@@ -133,12 +153,13 @@ public class SquidController : MonoBehaviour {
         var directionVector = new Vector2(
             Mathf.Cos(_relativeForceDirectionInDegrees * Mathf.Deg2Rad),
             Mathf.Sin(_relativeForceDirectionInDegrees * Mathf.Deg2Rad));
-        return directionVector * _jumpForceMagnitude;
+        return directionVector * _jumpForceMagnitude * _jumpHoldTimer;
     }
 
     private void DoubleJump() {
         // maybe make jump force dependent on trash or something
         _rigidBody.AddRelativeForce(CalculateJumpForceVector(), ForceMode2D.Impulse);
+        _jumpHoldTimer = 0f;
         _canDoubleJump = false;
         _isJumpQueued = false;
         // play jump sound
@@ -154,6 +175,7 @@ public class SquidController : MonoBehaviour {
     private void HandleSurface() {
         // play surfacing sound
         _canDoubleJump = true;
+        _jumpHoldTimer = 0f;
         OnSurface?.Invoke(this);
     }
 
