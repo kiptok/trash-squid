@@ -76,7 +76,7 @@ public class SquidController : MonoBehaviour {
         _rigidBody.gravityScale = _inWater ? _waterGravityScale : _airGravityScale;
         _rigidBody.drag = _inWater ? _waterLinearDrag : _airLinearDrag;
         _rigidBody.angularDrag = _inWater ? _waterAngularDrag : _airAngularDrag;
-        if (Input.GetKeyDown(KeyCode.E)) DropAllTrash();
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F)) DropAllTrash();
     }
 
     private void FixedUpdate() {
@@ -88,7 +88,6 @@ public class SquidController : MonoBehaviour {
         }
         if (_isJumpQueued) {
             DoubleJump(); // force determined by how long the jump was held
-            // animator
         }
 
         ApplyTorque();
@@ -121,14 +120,16 @@ public class SquidController : MonoBehaviour {
         if (_canDoubleJump && !_isJumpQueued && _isJumpHeld) {
             // check for release of double jump
             if (!_inWater && !(Input.GetButton("Jump") || Input.GetAxisRaw("Vertical") == 1)) {
+                animator.SetBool("Holding jump", false);
                 // reset if not held long enough
-                if (_jumpHoldTimer > _jumpHoldTime) _isJumpQueued = true;
+                if (_jumpHoldTimer > _jumpHoldTime) _isJumpQueued = true; // also maybe an indicator (prior) that jump is held long enough
                 else _jumpHoldTimer = 0f;
             }
         }
         _isJumpHeld = !_inWater && (Input.GetButton("Jump") || Input.GetAxisRaw("Vertical") == 1);
         if (!_isJumpHeld) return;
         // play some charging effect/sound
+        animator.SetBool("Holding jump", true); // maybe make this one-time
         _jumpHoldTimer += Time.deltaTime;
     }
 
