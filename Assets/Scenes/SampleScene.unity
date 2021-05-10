@@ -1689,16 +1689,19 @@ MonoBehaviour:
   _torqueForceMagnitude: -30
   _thrustTime: 0.51
   _jumpForceMagnitude: 9.8
+  _jumpHoldTime: 0.5
   _trashThrowDownFactor: 0.5
   _trashThrowVelocityFactor: 0.5
   _dropTime: 0.5
   _canSpamThrust: 1
+  _canSpamJump: 0
   _airGravityScale: 1
   _waterGravityScale: 0.001
   _airLinearDrag: 0
   _waterLinearDrag: 0.88
   _airAngularDrag: 15
   _waterAngularDrag: 15
+  _jumpHoldTimer: 0
 --- !u!50 &1015589098
 Rigidbody2D:
   serializedVersion: 4
