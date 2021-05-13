@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sky Material
-  m_Shader: {fileID: -6465566751694194690, guid: 91c38de818a8443418c6dbb8f5c1c330, type: 3}
+  m_Name: Cloud Material
+  m_Shader: {fileID: -6465566751694194690, guid: 12f3c8f4f7249484aae6929db9f287df, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -32,11 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_e2fdb8c7699948ce92f82b8741315e55: 0.07
-    - _Pollution: 0.05864745
+    - Vector1_2aed6c6d135b4ebe97b60a4449af2178: 0.1
     m_Colors:
-    - Color_08a60dd453664bf59fe586eba527cb7d: {r: 0.30704877, g: 0.38932145, b: 0.8679245, a: 0}
-    - Color_e0d942b56cd14600860d0b749218896e: {r: 0.23375754, g: 0.9716981, b: 0.91218454, a: 0}
-    - Sky_Color_A: {r: 0.9138543, g: 0.7734748, b: 0.97427267, a: 1}
-    - Sky_Color_B: {r: 0.90720934, g: 0.2641196, b: 0.5831098, a: 1}
+    - Vector2_7839884e21c7442d947d7f08ced5b553: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
