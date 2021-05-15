@@ -1,28 +1,25 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class FollowCamera : MonoBehaviour
-{
+public class FollowCamera : MonoBehaviour {
     [SerializeField] private Transform _target = null;
     [SerializeField] private float _lerpValuePerSecond = 0.1f;
 
     private Camera _camera;
 
-    private void Awake()
-    {
+    private void Awake() {
         if (_target == null)
             Debug.LogWarning("No _target. FollowCamera will remain inactive.", this);
         _camera = GetComponent<Camera>();
+        SquidController.OnSurface += OnSquidSurface;
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (_target != null)
             Follow();
     }
 
-    private void Follow()
-    {
+    private void Follow() {
         var distanceToTarget = _target.position - transform.position;
         var directionToTarget = distanceToTarget.normalized;
         var lerpValue = _lerpValuePerSecond * Time.deltaTime;
@@ -36,5 +33,9 @@ public class FollowCamera : MonoBehaviour
         xPos = Mathf.Clamp(xPos + movementThisFrame.x, -30.5f, 30.5f);
         yPos = Mathf.Clamp(yPos + movementThisFrame.y, -88.5f, 88.5f);
         transform.position = new Vector3(xPos, yPos, zPos);
+    }
+
+    private void OnSquidSurface(SquidController squid) {
+
     }
 }

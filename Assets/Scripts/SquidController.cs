@@ -91,6 +91,9 @@ public class SquidController : MonoBehaviour {
         }
 
         ApplyTorque();
+        if (_inWater) {
+            Glide();
+        }
     }
 
     private void OnTrashCollideWithSquipPickUpCollider(Trash trash, TrashDetector collider) {
@@ -135,6 +138,22 @@ public class SquidController : MonoBehaviour {
 
     private void ApplyTorque() {
         _rigidBody.AddTorque(_torque);
+    }
+
+    private void Glide() {
+        // var newVelocity = transform.rotation.eulerAngles * _rigidBody.velocity.magnitude;
+        var newVelocity = new Vector2(
+            Mathf.Cos((_relativeForceDirectionInDegrees + _rigidBody.rotation) * Mathf.Deg2Rad),
+            Mathf.Sin((_relativeForceDirectionInDegrees + _rigidBody.rotation) * Mathf.Deg2Rad));
+        newVelocity *= _rigidBody.velocity.magnitude;
+        newVelocity *= Vector2.Dot(newVelocity.normalized, _rigidBody.velocity.normalized);
+        _rigidBody.velocity = newVelocity;
+        //        Debug.Log("rigidbody velocity " + _rigidBody.velocity);
+        //        Debug.Log("new velocity " + newVelocity);
+        //        Debug.Log("dot product " + Vector2.Dot(newVelocity.normalized, _rigidBody.velocity.normalized));
+        //        Debug.Log(transform.rotation.eulerAngles);
+        //        Debug.Log(_rigidBody.velocity.magnitude);
+        //Debug.Log(newVelocity);
     }
 
     private void Thrust() {
