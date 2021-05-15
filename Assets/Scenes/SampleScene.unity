@@ -808,7 +808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -531, y: 49.880005}
+  m_AnchoredPosition: {x: -531, y: 50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &486355729
@@ -890,7 +890,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1015589095}
-  _lerpValuePerSecond: 2.25
+  _posLerpValuePerSecond: 2.5
+  _zoomLerpValuePerSecond: 1
+  _minOrthographicSize: 11.13
+  _maxOrthographicSize: 31.25
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -3055,7 +3058,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 531, y: 276.5}
+  m_AnchoredPosition: {x: 531, y: 276.75}
   m_SizeDelta: {x: 1062, y: 653.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1651993311
