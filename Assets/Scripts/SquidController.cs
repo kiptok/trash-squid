@@ -11,6 +11,7 @@ public class SquidController : MonoBehaviour {
     public static event Action<SquidController, Trash> OnDropTrash;
     public static event Action<SquidController> OnDive;
     public static event Action<SquidController> OnSurface;
+    public static event Action<SquidController> OnJump;
     public Animator animator;
     public AudioSource audioSource;
     public AudioClip trashGetSound;
@@ -182,6 +183,7 @@ public class SquidController : MonoBehaviour {
         _jumpHoldTimer = 0f;
         _canDoubleJump = false;
         _isJumpQueued = false;
+        OnJump?.Invoke(this);
         // play jump sound
     }
 

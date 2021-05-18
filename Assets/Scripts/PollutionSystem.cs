@@ -28,7 +28,8 @@ public class PollutionSystem : MonoBehaviour
         get => _pollution;
         private set
         {
-            _pollution = Mathf.Clamp(value, 0, _maxPollution);
+            //_pollution = Mathf.Clamp(value, 0, _maxPollution);
+            _pollution = value;
             OnPollutionSet?.Invoke(this, _pollution);
             //if (_pollution == _maxPollution) SceneManager.LoadScene("LossScene");
         }

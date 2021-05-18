@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 977164398924338706}
   - component: {fileID: 1711385376490875632}
   - component: {fileID: 2488472320405903175}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Trash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5025,7 +5025,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1840109842477310172}
   - component: {fileID: 3518952277224282298}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
