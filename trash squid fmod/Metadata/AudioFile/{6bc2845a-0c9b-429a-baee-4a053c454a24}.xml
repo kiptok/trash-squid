@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{6bc2845a-0c9b-429a-baee-4a053c454a24}">
+		<property name="assetPath">
+			<value>trash_pickup.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.7142857142857142</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d0f57452-a34a-4a40-9eb6-e38d611d9e41}</destination>
+		</relationship>
+	</object>
+</objects>
