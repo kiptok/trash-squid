@@ -48,6 +48,7 @@ public class SquidController : MonoBehaviour {
     private bool _isJumpHeld = false;
     private bool _isJumpQueued = false;
     private bool _canDoubleJump = false;
+    private bool _doubleJumped = false;
     public float _jumpHoldTimer = 0.0f;
     private float _torque = 0.0f;
     private bool _inWater = true;
@@ -92,7 +93,7 @@ public class SquidController : MonoBehaviour {
         }
 
         ApplyTorque();
-        if (_inWater) {
+        if (_inWater || _doubleJumped) {
             Glide();
         }
     }
@@ -183,6 +184,7 @@ public class SquidController : MonoBehaviour {
         _jumpHoldTimer = 0f;
         _canDoubleJump = false;
         _isJumpQueued = false;
+        _doubleJumped = true;
         OnJump?.Invoke(this);
         // play jump sound
     }
@@ -191,6 +193,7 @@ public class SquidController : MonoBehaviour {
         // maybe make dive sound dependent on physics
         audioSource.PlayOneShot(splashSound);
         _canDoubleJump = false;
+        _doubleJumped = false;
         OnDive?.Invoke(this);
     }
 
