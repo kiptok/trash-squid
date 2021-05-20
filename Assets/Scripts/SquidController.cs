@@ -58,11 +58,11 @@ public class SquidController : MonoBehaviour {
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _trashCollider = GetComponentInChildren<TrashDetector>();
-        Trash.OnOnTrashEntersTriggerHandled += OnTrashCollideWithSquipPickUpCollider;
+        Trash.OnOnTrashEntersTriggerHandled += OnTrashCollideWithSquidPickUpCollider;
     }
 
     private void OnDestroy() {
-        Trash.OnOnTrashEntersTriggerHandled -= OnTrashCollideWithSquipPickUpCollider;
+        Trash.OnOnTrashEntersTriggerHandled -= OnTrashCollideWithSquidPickUpCollider;
     }
 
     private void Update() {
@@ -97,7 +97,7 @@ public class SquidController : MonoBehaviour {
         }
     }
 
-    private void OnTrashCollideWithSquipPickUpCollider(Trash trash, TrashDetector collider) {
+    private void OnTrashCollideWithSquidPickUpCollider(Trash trash, TrashDetector collider) {
         if (collider == _trashCollider && _canPickUp) PickUpTrash(trash);
     }
 

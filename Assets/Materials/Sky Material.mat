@@ -33,10 +33,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_e2fdb8c7699948ce92f82b8741315e55: 0.07
-    - _Pollution: 0.03705178
+    - _Pollution: 0.0021295836
     m_Colors:
     - Color_08a60dd453664bf59fe586eba527cb7d: {r: 0.30704877, g: 0.38932145, b: 0.8679245, a: 0}
     - Color_e0d942b56cd14600860d0b749218896e: {r: 0.23375754, g: 0.9716981, b: 0.91218454, a: 0}
-    - Sky_Color_A: {r: 0.9877291, g: 0.8653108, b: 0.09266154, a: 1}
-    - Sky_Color_B: {r: 0.8141862, g: 0.5029342, b: 0.5274497, a: 1}
+    - Sky_Color_A: {r: 0.18092561, g: 0.9450286, b: 0.5248115, a: 1}
+    - Sky_Color_B: {r: 0.6065498, g: 0.8246491, b: 0.55161715, a: 1}
   m_BuildTextureStacks: []
