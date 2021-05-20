@@ -110,6 +110,8 @@ MonoBehaviour:
   _waterAngularDrag: 15
   bubbles: {fileID: 977164398924338706}
   trashGetSound: {fileID: 2488472320405903175}
+  TrashGetEvent: event:/Trash/Pickup
+  TrashDepositEvent: event:/Trash/Success
 --- !u!58 &3105170484388668648
 CircleCollider2D:
   m_ObjectHideFlags: 0
