@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="ParameterPreset" id="{ec2ebeae-a7de-4c2c-be07-9cbdded00d67}">
+		<property name="name">
+			<value>SquidY</value>
+		</property>
+		<relationship name="folder">
+			<destination>{23f92314-54d3-423b-adba-5aec8ac10629}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{b03d6515-0df5-4756-8ea2-c66ef5e6ce1d}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{b03d6515-0df5-4756-8ea2-c66ef5e6ce1d}">
+		<property name="minimum">
+			<value>-100</value>
+		</property>
+		<property name="maximum">
+			<value>0</value>
+		</property>
+		<property name="initialValue">
+			<value>-12</value>
+		</property>
+		<property name="isExposedRecursively">
+			<value>false</value>
+		</property>
+	</object>
+</objects>

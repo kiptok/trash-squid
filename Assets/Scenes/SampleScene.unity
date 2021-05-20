@@ -858,7 +858,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
@@ -869,14 +868,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519420029
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
 --- !u!114 &519420030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6660,13 +6651,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1540011530}
-  audioSource: {fileID: 1015589100}
-  trashGetSound: {fileID: 8300000, guid: 7065c2dcd64aa4fd49d141797483bdcf, type: 3}
-  thrustSound: {fileID: 8300000, guid: 0f696fff897f94cd780c58cf30ab7c44, type: 3}
-  jumpSound: {fileID: 0}
-  splashSound: {fileID: 8300000, guid: f7b8def8f52124b0bba38d8fe9015366, type: 3}
-  diveSound: {fileID: 0}
-  surfaceSound: {fileID: 0}
+  ThrustEvent: event:/Squid/Swim
+  DiveEvent: event:/Squid/Splash 3
+  SurfaceEvent: event:/Squid/Splash 2
   _thrustForceMagnitude: 6.89
   _relativeForceDirectionInDegrees: 90
   _torqueForceMagnitude: -30
@@ -6719,7 +6706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: 
+  Event: event:/Squid/Swim
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
@@ -6727,8 +6714,8 @@ MonoBehaviour:
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!82 &1015589100
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6736,7 +6723,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015589093}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7065c2dcd64aa4fd49d141797483bdcf, type: 3}
@@ -7298,7 +7285,6 @@ GameObject:
   - component: {fileID: 1264716675}
   - component: {fileID: 1264716677}
   - component: {fileID: 1264716674}
-  - component: {fileID: 1264716678}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -7313,14 +7299,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264716673}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79bf3085e9028c7419d31ca1f80ee1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   squid: {fileID: 1015589097}
-  minCutoff: 690
-  maxCutoff: 22000
+  GameMusicEvent: event:/Music/Game Music
 --- !u!82 &1264716675
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7456,29 +7441,6 @@ AudioLowPassFilter:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1264716678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1264716673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: event:/Music/Game Music
-  PlayEvent: 1
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!1 &1331528643
 GameObject:
   m_ObjectHideFlags: 0

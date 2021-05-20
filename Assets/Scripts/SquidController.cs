@@ -13,13 +13,12 @@ public class SquidController : MonoBehaviour {
     public static event Action<SquidController> OnSurface;
     public static event Action<SquidController> OnJump;
     public Animator animator;
-    public AudioSource audioSource;
-    public AudioClip trashGetSound;
-    public AudioClip thrustSound;
-    public AudioClip jumpSound;
-    public AudioClip splashSound;
-    public AudioClip diveSound;
-    public AudioClip surfaceSound;
+
+    [FMODUnity.EventRef] public string ThrustEvent = "";
+    [FMODUnity.EventRef] public string DiveEvent = "";
+    [FMODUnity.EventRef] public string SurfaceEvent = "";
+
+    FMOD.Studio.PARAMETER_ID speedParameterId;
 
     [SerializeField, TweakableMember(group = "Squid")] private float _thrustForceMagnitude = 1.0f;
     [SerializeField] private float _relativeForceDirectionInDegrees = 0.0f;
@@ -161,7 +160,8 @@ public class SquidController : MonoBehaviour {
     private void Thrust() {
         _rigidBody.AddRelativeForce(CalculateThrustForceVector(), ForceMode2D.Impulse);
         _isThrustQueued = false;
-        audioSource.PlayOneShot(thrustSound, Random.Range(0.75f, 1f));
+        //audioSource.PlayOneShot(thrustSound, Random.Range(0.75f, 1f));
+        FMODUnity.RuntimeManager.PlayOneShot(ThrustEvent, transform.position);
     }
 
     private Vector2 CalculateThrustForceVector() {
@@ -191,7 +191,7 @@ public class SquidController : MonoBehaviour {
 
     private void HandleDive() {
         // maybe make dive sound dependent on physics
-        audioSource.PlayOneShot(splashSound);
+        FMODUnity.RuntimeManager.PlayOneShot(DiveEvent, transform.position);
         _canDoubleJump = false;
         _doubleJumped = false;
         OnDive?.Invoke(this);
@@ -199,6 +199,7 @@ public class SquidController : MonoBehaviour {
 
     private void HandleSurface() {
         // play surfacing sound
+        FMODUnity.RuntimeManager.PlayOneShot(SurfaceEvent, transform.position);
         _canDoubleJump = true;
         _jumpHoldTimer = 0f;
         OnSurface?.Invoke(this);
@@ -209,7 +210,6 @@ public class SquidController : MonoBehaviour {
         trash.transform.position = _trashCollider.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
         trash.GetComponent<Rigidbody2D>().simulated = false;
         _pickedUpTrash.Add(trash);
-        audioSource.Play();
     }
 
     private IEnumerator ResetPickUp() {

@@ -16,7 +16,9 @@ public class Trash : MonoBehaviour
     [SerializeField, TweakableMember(minValue = 0, maxValue = 25, group = "Trash")] private float _airAngularDrag = 15.0f;
     [SerializeField, TweakableMember(minValue = 0, maxValue = 25, group = "Trash")] private float _waterAngularDrag = 15.0f;
     public ParticleSystem bubbles;
-    public AudioSource trashGetSound;
+
+    [FMODUnity.EventRef] public string TrashGetEvent = "";
+    [FMODUnity.EventRef] public string TrashDepositEvent = "";
 
     private bool _inWater = false;
     private bool _canBePickedUp = true;
@@ -40,6 +42,7 @@ public class Trash : MonoBehaviour
         if (trash != this) return;
         if (!_canBePickedUp) return;
         _pickUpCollider = trashDetector.GetComponent<Collider2D>();
+        FMODUnity.RuntimeManager.PlayOneShot(TrashGetEvent);
         OnOnTrashEntersTriggerHandled?.Invoke(this, trashDetector);
     }
 
@@ -56,7 +59,7 @@ public class Trash : MonoBehaviour
         _inBoat = true;
         _rigidBody.simulated = false;
         bubbles.Stop();
-        if (_dropped) trashGetSound.Play();
+        if (_dropped) FMODUnity.RuntimeManager.PlayOneShot(TrashDepositEvent);
         // play sound
     }
 
